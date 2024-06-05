@@ -6,6 +6,7 @@ from escola.serializer import AlunoSerializer, AlunoSerializerV2, CursoSerialize
 class AlunosViewSet(viewsets.ModelViewSet):
     """Exibindo todos os alunos e alunas"""
     queryset = Aluno.objects.all()
+    http_method_names = ['get', 'post', 'put', 'patch']
 
     def get_serializer_class(self):
         if self.request.version == 'v2':
@@ -16,12 +17,14 @@ class AlunosViewSet(viewsets.ModelViewSet):
 class CursosViewSet(viewsets.ModelViewSet):
     """Exibindo todos os cursos"""
     queryset = Curso.objects.all()
+    http_method_names = ['get', 'post', 'put', 'patch']
     serializer_class = CursoSerializer
 
 
 class MatriculaViewSet(viewsets.ModelViewSet):
     """Listando todas as matrículas"""
     queryset = Matricula.objects.all()
+    http_method_names = ['get', 'post', 'put', 'patch']
     serializer_class = MatriculaSerializer
 
 
@@ -32,6 +35,7 @@ class ListaMatriculasAluno(generics.ListAPIView):
         queryset = Matricula.objects.filter(aluno_id=self.kwargs['pk'])
         return queryset
     serializer_class = ListaMatriculasAlunoSerializer
+    http_method_names = ['get', 'post', 'put', 'patch']
 
 
 class ListaAlunosMatriculados(generics.ListAPIView):
@@ -41,3 +45,4 @@ class ListaAlunosMatriculados(generics.ListAPIView):
         queryset = Matricula.objects.filter(curso_id=self.kwargs['pk'])
         return queryset
     serializer_class = ListaAlunosMatriculadosSerializer
+    http_method_names = ['get', 'post', 'put', 'patch']
