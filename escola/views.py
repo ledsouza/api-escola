@@ -3,10 +3,13 @@ from escola.models import Aluno, Curso, Matricula
 from escola.serializer import AlunoSerializer, AlunoSerializerV2, CursoSerializer, MatriculaSerializer, ListaMatriculasAlunoSerializer, ListaAlunosMatriculadosSerializer
 
 
-class AlunosViewSet(viewsets.ModelViewSet):
+class DefaultHttpMethods:
+    http_method_names = ['get', 'post', 'put', 'patch']
+
+
+class AlunosViewSet(DefaultHttpMethods, viewsets.ModelViewSet):
     """Exibindo todos os alunos e alunas"""
     queryset = Aluno.objects.all()
-    http_method_names = ['get', 'post', 'put', 'patch']
 
     def get_serializer_class(self):
         if self.request.version == 'v2':
@@ -14,35 +17,31 @@ class AlunosViewSet(viewsets.ModelViewSet):
         return AlunoSerializer
 
 
-class CursosViewSet(viewsets.ModelViewSet):
+class CursosViewSet(DefaultHttpMethods, viewsets.ModelViewSet):
     """Exibindo todos os cursos"""
     queryset = Curso.objects.all()
-    http_method_names = ['get', 'post', 'put', 'patch']
     serializer_class = CursoSerializer
 
 
-class MatriculaViewSet(viewsets.ModelViewSet):
+class MatriculaViewSet(DefaultHttpMethods, viewsets.ModelViewSet):
     """Listando todas as matrículas"""
     queryset = Matricula.objects.all()
-    http_method_names = ['get', 'post', 'put', 'patch']
     serializer_class = MatriculaSerializer
 
 
-class ListaMatriculasAluno(generics.ListAPIView):
+class ListaMatriculasAluno(DefaultHttpMethods, generics.ListAPIView):
     """Listando as matrículas de um aluno ou aluna"""
 
     def get_queryset(self):
         queryset = Matricula.objects.filter(aluno_id=self.kwargs['pk'])
         return queryset
     serializer_class = ListaMatriculasAlunoSerializer
-    http_method_names = ['get', 'post', 'put', 'patch']
 
 
-class ListaAlunosMatriculados(generics.ListAPIView):
+class ListaAlunosMatriculados(DefaultHttpMethods, generics.ListAPIView):
     """Listando alunos e alunas matriculados em um curso"""
 
     def get_queryset(self):
         queryset = Matricula.objects.filter(curso_id=self.kwargs['pk'])
         return queryset
     serializer_class = ListaAlunosMatriculadosSerializer
-    http_method_names = ['get', 'post', 'put', 'patch']
